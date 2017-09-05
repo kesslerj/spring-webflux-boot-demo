@@ -16,15 +16,16 @@
 
 package de.acando.jk.reactivedemo.persistence;
 
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 
 public interface PersonRepository {
 
-	Mono<Person> getPerson(int id);
+	Single<Person> getPerson(int id);
 
-	Flux<Person> allPeople();
+	Observable<Person> allPeople();
 
-	Mono<Void> savePerson(Mono<Person> person);
+	Completable savePerson(Single<Person> person);
 
 }

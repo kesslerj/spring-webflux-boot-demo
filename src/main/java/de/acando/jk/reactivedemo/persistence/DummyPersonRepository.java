@@ -16,15 +16,14 @@
 
 package de.acando.jk.reactivedemo.persistence;
 
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * @author Arjen Poutsma
@@ -40,29 +39,21 @@ public class DummyPersonRepository implements PersonRepository {
 	}
 
 	@Override
-	public Mono<Person> getPerson(int id) {
-		return Mono.justOrEmpty(this.people.get(id));
+	public Single<Person> getPerson(int id) {
+		return Single.just(this.people.get(id));
 	}
 
 	@Override
-	public Flux<Person> allPeople() {
-		return Flux.fromIterable(this.people.values());
+	public Observable<Person> allPeople() {
+		return Observable.fromIterable(this.people.values());
 	}
 
 	@Override
-	public Mono<Void> savePerson(Mono<Person> personMono) {
-		return personMono.doOnNext(person -> {
+	public Completable savePerson(Single<Person> personMono) {
+		return personMono.doOnSuccess(person -> {
 			int id = people.size() + 1;
 			people.put(id, person);
-
-			LocalTime start = LocalTime.now();
-			for (int j = 0; j < 3; j++) {
-				for (int i = 0; i < Integer.MAX_VALUE; i++) {
-					Math.pow(i, i);
-				}
-			}
-			System.out.println("Duration: " + ChronoUnit.MILLIS.between(start, LocalTime.now()));
 			System.out.format("Saved %s with id %d%n", person, id);
-		}).thenEmpty(Mono.empty());
+		}).toCompletable();
 	}
 }
