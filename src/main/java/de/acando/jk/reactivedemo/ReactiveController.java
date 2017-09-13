@@ -25,7 +25,7 @@ public class ReactiveController {
 	Mono<Void> createSomething(@RequestBody Mono<Person> body) {
 		Mono<Void> result = repository.savePerson(body);
 		/*
-		 * everything done here is executed before the save, because the server triggers the execution
+		 * everything done here (not chained to the mono) is executed before the save, because the server triggers the execution
 		 */
 		System.out.println("Moep");
 		return result;
