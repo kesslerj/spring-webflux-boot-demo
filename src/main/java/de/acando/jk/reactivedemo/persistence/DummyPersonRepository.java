@@ -19,8 +19,6 @@
 
 package de.acando.jk.reactivedemo.persistence;
 
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,28 +41,20 @@ public class DummyPersonRepository implements PersonRepository {
 	}
 
 	@Override
-	public Mono<Person> getPerson(int id) {
+	public Mono<Person> findById(int id) {
 		return Mono.justOrEmpty(this.people.get(id));
 	}
 
 	@Override
-	public Flux<Person> allPeople() {
+	public Flux<Person> findAll() {
 		return Flux.fromIterable(this.people.values());
 	}
 
 	@Override
-	public Mono<Void> savePerson(Mono<Person> personMono) {
+	public Mono<Void> save(Mono<Person> personMono) {
 		return personMono.doOnNext(person -> {
 			int id = people.size() + 1;
 			people.put(id, person);
-
-			LocalTime start = LocalTime.now();
-			for (int j = 0; j < 3; j++) {
-				for (int i = 0; i < Integer.MAX_VALUE; i++) {
-					Math.pow(i, i);
-				}
-			}
-			System.out.println("Duration: " + ChronoUnit.MILLIS.between(start, LocalTime.now()));
 			System.out.format("Saved %s with id %d%n", person, id);
 		}).thenEmpty(Mono.empty());
 	}

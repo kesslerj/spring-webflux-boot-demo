@@ -24,10 +24,10 @@ import reactor.core.publisher.Mono;
 
 public interface PersonRepository {
 
-	Mono<Person> getPerson(int id);
+	Mono<Person> findById(int id);
 
-	Flux<Person> allPeople();
+	Flux<Person> findAll();
 
-	Mono<Void> savePerson(Mono<Person> person);
+	Mono<Void> save(Mono<Person> person);
 
 }
