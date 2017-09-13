@@ -2,6 +2,7 @@ package de.acando.jk.reactivedemo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,6 +42,14 @@ public class ReactiveController {
 		Flux<Person> findAll = repository.findAll();
 		System.out.println("GET /persons returning");
 		return findAll;
+	}
+
+	@GetMapping(value = "/persons/{id}")
+	Mono<Person> singlePerson(@PathVariable("id") String id) {
+		System.out.println("GET /persons/{id} incoming");
+		Mono<Person> result = repository.findById(Mono.just(id));
+		System.out.println("GET /persons/{id} returning");
+		return result;
 	}
 
 }
