@@ -23,18 +23,24 @@ public class ReactiveController {
 
 	@PostMapping("/persons")
 	Mono<Void> createSomething(@RequestBody Mono<Person> body) {
-		Mono<Void> result = repository.savePerson(body);
+		System.out.println("POST /persons incoming");
+
+		// a bit tricky: only saveAll takes a Publisher, save only takes Person as Parameter
+		Mono<Void> result = repository.saveAll(body).then();
 		/*
 		 * everything done here (not chained to the mono) is executed before the save, because the server triggers the execution
 		 */
-		System.out.println("Moep");
+		System.out.println("POST /persons returning");
 		return result;
 	}
 
 	// @GetMapping(value = "/persons", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
 	@GetMapping(value = "/persons")
 	Flux<Person> allPersons() {
-		return repository.allPeople();
+		System.out.println("GET /persons incoming");
+		Flux<Person> findAll = repository.findAll();
+		System.out.println("GET /persons returning");
+		return findAll;
 	}
 
 }

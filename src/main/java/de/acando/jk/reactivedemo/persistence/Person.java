@@ -19,17 +19,24 @@
 
 package de.acando.jk.reactivedemo.persistence;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@Document
 public class Person {
 
+	private String id;
 	private final String name;
-
 	private final int age;
 
 	public Person(@JsonProperty("name") String name, @JsonProperty("age") int age) {
 		this.name = name;
 		this.age = age;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public String getName() {
@@ -38,6 +45,10 @@ public class Person {
 
 	public int getAge() {
 		return this.age;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	@Override
